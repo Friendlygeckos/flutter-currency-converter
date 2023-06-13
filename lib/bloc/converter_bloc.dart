@@ -26,17 +26,14 @@ class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
   Future<void> _inputAmount(
       InputAmount event, Emitter<ConverterState> emit) async {
     final input = event.amount;
-    debugPrint('inside InputAmount event -> $input');
     try {
       final response = await _currencyRepository.fetchCurrencyInformation();
       final convertedAmount = input * response.price;
-      debugPrint('converted Amount -> $convertedAmount');
       emit(
         state.copyWith(
             status: BlocStatus.success, convertedAmount: convertedAmount),
       );
     } catch (e) {
-      debugPrint('error -> $e');
       emit(
         state.copyWith(status: BlocStatus.noData, convertedAmount: 0.0),
       );

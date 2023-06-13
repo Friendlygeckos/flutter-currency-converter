@@ -38,7 +38,6 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                   child: TextField(
                     controller: currencyInputController,
                     onChanged: (value) {
-                      debugPrint(value);
                       bloc.add(
                         InputAmount(
                           amount: double.parse(value),
