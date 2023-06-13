@@ -13,6 +13,7 @@ class CurrencyConverter extends StatefulWidget {
 class _CurrencyConverterState extends State<CurrencyConverter> {
   final TextEditingController _currencyInputController =
       TextEditingController();
+  String dropdownValue = 'jpy';
 
   @override
   void dispose() {
@@ -38,40 +39,45 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
           body: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Center(
-                child: SizedBox(
-                  width: 100,
-                  child: TextField(
-                    controller: _currencyInputController,
-                    onChanged: (value) {
-                      bloc.add(
-                        InputAmount(
-                          amount: double.parse(value),
-                          conversionRate: currencyModel.usd[toCurrency]!,
-                        ),
-                      );
-                    },
+              if (state.status == BlocStatus.loading) ...[
+                const CircularProgressIndicator(),
+              ] else ...[
+                Center(
+                  child: SizedBox(
+                    width: 100,
+                    child: TextField(
+                      controller: _currencyInputController,
+                      onChanged: (value) {
+                        bloc.add(
+                          InputAmount(
+                            amount: double.parse(value),
+                            conversionRate: currencyModel.usd[toCurrency]!,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-              Text(fromCurrency),
-              const Icon(Icons.arrow_forward),
-              Text('$convertedAmount'),
-              Text(toCurrency),
-              // TODO(Ryan): show a progress indicator before loading dropdown values
-              // DropdownButton<String>(
-              //   value: availableCurrencies[0],
-              //   items: availableCurrencies
-              //       .map<DropdownMenuItem<String>>((String value) {
-              //     return DropdownMenuItem<String>(
-              //       value: value,
-              //       child: Text(value.toString()),
-              //     );
-              //   }).toList(),
-              //   onChanged: (String? newValue) {
-              //     debugPrint('$newValue');
-              //   },
-              // ),
+                Text(fromCurrency),
+                const Icon(Icons.arrow_forward),
+                Text('$convertedAmount'),
+                DropdownButton<String>(
+                  value: dropdownValue,
+                  items: availableCurrencies
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value.toString()),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      dropdownValue = value!;
+                    });
+                    bloc.add(UpdateSelectedCurrency(selectedCurrency: value!));
+                  },
+                ),
+              ],
             ],
           ),
         );

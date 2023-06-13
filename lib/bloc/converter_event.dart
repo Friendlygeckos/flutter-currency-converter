@@ -24,3 +24,14 @@ class InputAmount extends ConverterEvent {
         conversionRate,
       ];
 }
+
+class UpdateSelectedCurrency extends ConverterEvent {
+  final String selectedCurrency;
+
+  const UpdateSelectedCurrency({
+    required this.selectedCurrency,
+  });
+
+  @override
+  List<Object?> get props => [selectedCurrency];
+}
