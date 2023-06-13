@@ -53,6 +53,7 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                 ),
               ),
               Text(fromCurrency),
+              const Icon(Icons.arrow_forward),
               Text('$convertedAmount'),
               Text(toCurrency),
             ],
