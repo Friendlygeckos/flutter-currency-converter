@@ -7,6 +7,7 @@ class ConverterState extends Equatable {
         convertedAmount = 0.0,
         fromCurrency = 'usd',
         toCurrency = 'jpy',
+        availableCurrencies = const [],
         status = BlocStatus.initial;
 
   const ConverterState({
@@ -16,6 +17,7 @@ class ConverterState extends Equatable {
     required this.fromCurrency,
     required this.toCurrency,
     required this.convertedAmount,
+    required this.availableCurrencies,
   });
 
   final CurrencyModel currencyModel;
@@ -24,6 +26,7 @@ class ConverterState extends Equatable {
   final String fromCurrency;
   final String toCurrency;
   final BlocStatus status;
+  final List<String> availableCurrencies;
 
   ConverterState copyWith({
     CurrencyModel? currencyModel,
@@ -32,6 +35,7 @@ class ConverterState extends Equatable {
     String? fromCurrency,
     String? toCurrency,
     BlocStatus? status,
+    List<String>? availableCurrencies,
   }) {
     return ConverterState(
       currencyModel: currencyModel ?? this.currencyModel,
@@ -40,6 +44,7 @@ class ConverterState extends Equatable {
       fromCurrency: fromCurrency ?? this.fromCurrency,
       toCurrency: toCurrency ?? this.toCurrency,
       status: status ?? this.status,
+      availableCurrencies: availableCurrencies ?? this.availableCurrencies,
     );
   }
 
@@ -51,5 +56,6 @@ class ConverterState extends Equatable {
         fromCurrency,
         toCurrency,
         status,
+        availableCurrencies,
       ];
 }

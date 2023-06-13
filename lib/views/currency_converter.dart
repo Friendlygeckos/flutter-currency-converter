@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_currency_converter/bloc/converter_bloc.dart';
+import 'package:flutter_currency_converter/service/enums/bloc_status.dart';
 
 class CurrencyConverter extends StatefulWidget {
   const CurrencyConverter({super.key});
@@ -29,6 +30,7 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
         final currencyModel = state.currencyModel;
         final fromCurrency = state.fromCurrency;
         final toCurrency = state.toCurrency;
+        final availableCurrencies = state.availableCurrencies;
         return Scaffold(
           appBar: AppBar(
             title: const Text('Currency Converter'),
@@ -56,6 +58,20 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
               const Icon(Icons.arrow_forward),
               Text('$convertedAmount'),
               Text(toCurrency),
+              // TODO(Ryan): show a progress indicator before loading dropdown values
+              // DropdownButton<String>(
+              //   value: availableCurrencies[0],
+              //   items: availableCurrencies
+              //       .map<DropdownMenuItem<String>>((String value) {
+              //     return DropdownMenuItem<String>(
+              //       value: value,
+              //       child: Text(value.toString()),
+              //     );
+              //   }).toList(),
+              //   onChanged: (String? newValue) {
+              //     debugPrint('$newValue');
+              //   },
+              // ),
             ],
           ),
         );

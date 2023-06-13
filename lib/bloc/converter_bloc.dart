@@ -23,7 +23,9 @@ class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
   final CurrencyRepository _currencyRepository;
 
   Future<void> _fetchCurrencyInformation(
-      FetchCurrencyInformation event, Emitter<ConverterState> emit) async {
+    FetchCurrencyInformation event,
+    Emitter<ConverterState> emit,
+  ) async {
     try {
       final currencyModel = await _currencyRepository.fetchCurrencyInformation(
         fromCurrency: state.fromCurrency,
@@ -31,6 +33,7 @@ class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
       emit(
         state.copyWith(
           currencyModel: currencyModel,
+          availableCurrencies: currencyModel.usd.keys.toList(),
           status: BlocStatus.success,
         ),
       );
@@ -41,7 +44,9 @@ class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
   }
 
   Future<void> _inputAmount(
-      InputAmount event, Emitter<ConverterState> emit) async {
+    InputAmount event,
+    Emitter<ConverterState> emit,
+  ) async {
     final input = event.amount;
     final conversionRate = event.conversionRate;
     final convertedAmount = input * conversionRate;
