@@ -10,7 +10,7 @@ abstract class ConverterEvent extends Equatable {
 class FetchCurrencyInformation extends ConverterEvent {}
 
 class InputAmount extends ConverterEvent {
-  final double amount;
+  final String amount;
   final double conversionRate;
 
   const InputAmount({

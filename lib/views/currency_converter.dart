@@ -50,7 +50,7 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                       onChanged: (value) {
                         bloc.add(
                           InputAmount(
-                            amount: double.parse(value),
+                            amount: value,
                             conversionRate: currencyModel.usd[toCurrency]!,
                           ),
                         );

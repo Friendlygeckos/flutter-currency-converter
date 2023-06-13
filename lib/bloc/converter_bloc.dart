@@ -50,8 +50,9 @@ class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
     Emitter<ConverterState> emit,
   ) async {
     final input = event.amount;
+    final parsedInput = input.isEmpty ? 0.0 : double.parse(input);
     final conversionRate = event.conversionRate;
-    final convertedAmount = input * conversionRate;
+    final convertedAmount = parsedInput * conversionRate;
     emit(
       state.copyWith(
         status: BlocStatus.success,
