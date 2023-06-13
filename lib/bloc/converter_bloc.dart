@@ -13,30 +13,59 @@ part 'converter_state.dart';
 class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
   ConverterBloc({required CurrencyRepository currencyRepository})
       : _currencyRepository = currencyRepository,
-        super(ConverterState.empty()) {
+        super(ConverterState.initial()) {
     on<FetchCurrencyInformation>(_fetchCurrencyInformation);
     on<InputAmount>(_inputAmount);
+    on<UpdateSelectedCurrency>(_updateSelectedCurrency);
+
+    add(FetchCurrencyInformation());
   }
 
   final CurrencyRepository _currencyRepository;
 
   Future<void> _fetchCurrencyInformation(
-      FetchCurrencyInformation event, Emitter<ConverterState> emit) async {}
-
-  Future<void> _inputAmount(
-      InputAmount event, Emitter<ConverterState> emit) async {
-    final input = event.amount;
+    FetchCurrencyInformation event,
+    Emitter<ConverterState> emit,
+  ) async {
     try {
-      final response = await _currencyRepository.fetchCurrencyInformation();
-      final convertedAmount = input * response.price;
+      emit(state.copyWith(status: BlocStatus.loading));
+      final currencyModel = await _currencyRepository.fetchCurrencyInformation(
+        fromCurrency: state.fromCurrency,
+      );
       emit(
         state.copyWith(
-            status: BlocStatus.success, convertedAmount: convertedAmount),
+          currencyModel: currencyModel,
+          availableCurrencies: currencyModel.usd.keys.toList(),
+          status: BlocStatus.success,
+        ),
       );
     } catch (e) {
-      emit(
-        state.copyWith(status: BlocStatus.noData, convertedAmount: 0.0),
-      );
+      debugPrint('error -> $e');
+      emit(state.copyWith(status: BlocStatus.noData));
     }
+  }
+
+  Future<void> _inputAmount(
+    InputAmount event,
+    Emitter<ConverterState> emit,
+  ) async {
+    final input = event.amount;
+    final parsedInput = input.isEmpty ? 0.0 : double.parse(input);
+    final conversionRate = event.conversionRate;
+    final convertedAmount = parsedInput * conversionRate;
+    emit(
+      state.copyWith(
+        status: BlocStatus.success,
+        convertedAmount: convertedAmount,
+      ),
+    );
+  }
+
+  Future<void> _updateSelectedCurrency(
+    UpdateSelectedCurrency event,
+    Emitter<ConverterState> emit,
+  ) async {
+    final selectedCurrency = event.selectedCurrency;
+    emit(state.copyWith(toCurrency: selectedCurrency));
   }
 }

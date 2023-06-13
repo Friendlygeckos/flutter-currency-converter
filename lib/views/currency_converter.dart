@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_currency_converter/bloc/converter_bloc.dart';
+import 'package:flutter_currency_converter/service/enums/bloc_status.dart';
 
 class CurrencyConverter extends StatefulWidget {
   const CurrencyConverter({super.key});
@@ -10,11 +11,13 @@ class CurrencyConverter extends StatefulWidget {
 }
 
 class _CurrencyConverterState extends State<CurrencyConverter> {
-  final TextEditingController currencyInputController = TextEditingController();
+  final TextEditingController _currencyInputController =
+      TextEditingController();
+  String dropdownValue = 'jpy';
 
   @override
   void dispose() {
-    currencyInputController.dispose();
+    _currencyInputController.dispose();
     super.dispose();
   }
 
@@ -25,6 +28,10 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
       builder: (context, state) {
         final bloc = context.read<ConverterBloc>();
         final convertedAmount = state.convertedAmount;
+        final currencyModel = state.currencyModel;
+        final fromCurrency = state.fromCurrency;
+        final toCurrency = state.toCurrency;
+        final availableCurrencies = state.availableCurrencies;
         return Scaffold(
           appBar: AppBar(
             title: const Text('Currency Converter'),
@@ -32,24 +39,45 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
           body: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Center(
-                child: SizedBox(
-                  width: 100,
-                  child: TextField(
-                    controller: currencyInputController,
-                    onChanged: (value) {
-                      bloc.add(
-                        InputAmount(
-                          amount: double.parse(value),
-                        ),
-                      );
-                    },
+              if (state.status == BlocStatus.loading) ...[
+                const CircularProgressIndicator(),
+              ] else ...[
+                Center(
+                  child: SizedBox(
+                    width: 100,
+                    child: TextField(
+                      controller: _currencyInputController,
+                      onChanged: (value) {
+                        bloc.add(
+                          InputAmount(
+                            amount: value,
+                            conversionRate: currencyModel.usd[toCurrency]!,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-              const Text('USD'),
-              Text('$convertedAmount'),
-              const Text('JPY'),
+                Text(fromCurrency),
+                const Icon(Icons.arrow_forward),
+                Text('$convertedAmount'),
+                DropdownButton<String>(
+                  value: dropdownValue,
+                  items: availableCurrencies
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value.toString()),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      dropdownValue = value!;
+                    });
+                    bloc.add(UpdateSelectedCurrency(selectedCurrency: value!));
+                  },
+                ),
+              ],
             ],
           ),
         );

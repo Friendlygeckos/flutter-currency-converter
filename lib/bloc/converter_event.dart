@@ -7,13 +7,31 @@ abstract class ConverterEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class FetchCurrencyInformation extends ConverterEvent{}
+class FetchCurrencyInformation extends ConverterEvent {}
 
 class InputAmount extends ConverterEvent {
-  final double amount;
+  final String amount;
+  final double conversionRate;
 
-  const InputAmount({required this.amount});
+  const InputAmount({
+    required this.amount,
+    required this.conversionRate,
+  });
 
   @override
-  List<Object?> get props => [amount];
+  List<Object?> get props => [
+        amount,
+        conversionRate,
+      ];
+}
+
+class UpdateSelectedCurrency extends ConverterEvent {
+  final String selectedCurrency;
+
+  const UpdateSelectedCurrency({
+    required this.selectedCurrency,
+  });
+
+  @override
+  List<Object?> get props => [selectedCurrency];
 }

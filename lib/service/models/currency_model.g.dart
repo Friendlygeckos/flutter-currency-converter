@@ -9,11 +9,13 @@ part of 'currency_model.dart';
 CurrencyModel _$CurrencyModelFromJson(Map<String, dynamic> json) =>
     CurrencyModel(
       date: DateTime.parse(json['date'] as String),
-      price: (json['price'] as num).toDouble(),
+      usd: (json['usd'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
     );
 
 Map<String, dynamic> _$CurrencyModelToJson(CurrencyModel instance) =>
     <String, dynamic>{
       'date': instance.date.toIso8601String(),
-      'price': instance.price,
+      'usd': instance.usd,
     };
