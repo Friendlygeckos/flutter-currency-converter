@@ -13,30 +13,45 @@ part 'converter_state.dart';
 class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
   ConverterBloc({required CurrencyRepository currencyRepository})
       : _currencyRepository = currencyRepository,
-        super(ConverterState.empty()) {
+        super(ConverterState.initial()) {
     on<FetchCurrencyInformation>(_fetchCurrencyInformation);
     on<InputAmount>(_inputAmount);
+
+    add(FetchCurrencyInformation());
   }
 
   final CurrencyRepository _currencyRepository;
 
   Future<void> _fetchCurrencyInformation(
-      FetchCurrencyInformation event, Emitter<ConverterState> emit) async {}
+      FetchCurrencyInformation event, Emitter<ConverterState> emit) async {
+    try {
+      final currencyModel = await _currencyRepository.fetchCurrencyInformation(
+        fromCurrency: state.fromCurrency,
+        toCurrency: state.toCurrency,
+      );
+      print(currencyModel.price);
+      emit(
+        state.copyWith(
+          currencyModel: currencyModel,
+          status: BlocStatus.success,
+        ),
+      );
+    } catch (e) {
+      debugPrint('error -> $e');
+      emit(state.copyWith(status: BlocStatus.noData));
+    }
+  }
 
   Future<void> _inputAmount(
       InputAmount event, Emitter<ConverterState> emit) async {
     final input = event.amount;
-    try {
-      final response = await _currencyRepository.fetchCurrencyInformation();
-      final convertedAmount = input * response.price;
-      emit(
-        state.copyWith(
-            status: BlocStatus.success, convertedAmount: convertedAmount),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(status: BlocStatus.noData, convertedAmount: 0.0),
-      );
-    }
+    final conversionRate = event.conversionRate;
+    final convertedAmount = input * conversionRate;
+    emit(
+      state.copyWith(
+        status: BlocStatus.success,
+        convertedAmount: convertedAmount,
+      ),
+    );
   }
 }
