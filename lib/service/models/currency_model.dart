@@ -4,9 +4,9 @@ part 'currency_model.g.dart';
 @JsonSerializable()
 class CurrencyModel {
   final DateTime date;
-  final double price;
+  final Map<String, double> usd;
 
-  const CurrencyModel({required this.date, required this.price});
+  const CurrencyModel({required this.date, required this.usd});
 
   factory CurrencyModel.fromJson(Map<String, dynamic> json) =>
       _$CurrencyModelFromJson(json);

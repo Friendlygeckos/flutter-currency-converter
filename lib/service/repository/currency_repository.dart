@@ -5,9 +5,10 @@ import 'package:http/http.dart' as http;
 
 class CurrencyRepository {
   Future<CurrencyModel> fetchCurrencyInformation(
-      {required String fromCurrency, required String toCurrency}) async {
+      {required String fromCurrency}) async {
     var response = await http.get(Uri.parse(
-        'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/$fromCurrency/$toCurrency.json'));
+      'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/$fromCurrency.json',
+    ));
     return CurrencyModel.fromJson(jsonDecode(response.body));
   }
 }

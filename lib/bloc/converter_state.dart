@@ -2,7 +2,7 @@ part of 'converter_bloc.dart';
 
 class ConverterState extends Equatable {
   ConverterState.initial()
-      : currencyModel = CurrencyModel(date: DateTime.now(), price: 0.0),
+      : currencyModel = CurrencyModel(date: DateTime.now(), usd: {}),
         input = 0.0,
         convertedAmount = 0.0,
         fromCurrency = 'usd',
@@ -24,8 +24,6 @@ class ConverterState extends Equatable {
   final String fromCurrency;
   final String toCurrency;
   final BlocStatus status;
-
-
 
   ConverterState copyWith({
     CurrencyModel? currencyModel,

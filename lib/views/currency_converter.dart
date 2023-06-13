@@ -10,7 +10,8 @@ class CurrencyConverter extends StatefulWidget {
 }
 
 class _CurrencyConverterState extends State<CurrencyConverter> {
-  final TextEditingController _currencyInputController = TextEditingController();
+  final TextEditingController _currencyInputController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -26,6 +27,8 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
         final bloc = context.read<ConverterBloc>();
         final convertedAmount = state.convertedAmount;
         final currencyModel = state.currencyModel;
+        final fromCurrency = state.fromCurrency;
+        final toCurrency = state.toCurrency;
         return Scaffold(
           appBar: AppBar(
             title: const Text('Currency Converter'),
@@ -42,16 +45,16 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                       bloc.add(
                         InputAmount(
                           amount: double.parse(value),
-                          conversionRate: currencyModel.price,
+                          conversionRate: currencyModel.usd[toCurrency]!,
                         ),
                       );
                     },
                   ),
                 ),
               ),
-              Text(state.fromCurrency),
+              Text(fromCurrency),
               Text('$convertedAmount'),
-              Text(state.toCurrency),
+              Text(toCurrency),
             ],
           ),
         );

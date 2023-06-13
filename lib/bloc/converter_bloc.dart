@@ -27,9 +27,7 @@ class ConverterBloc extends Bloc<ConverterEvent, ConverterState> {
     try {
       final currencyModel = await _currencyRepository.fetchCurrencyInformation(
         fromCurrency: state.fromCurrency,
-        toCurrency: state.toCurrency,
       );
-      print(currencyModel.price);
       emit(
         state.copyWith(
           currencyModel: currencyModel,
