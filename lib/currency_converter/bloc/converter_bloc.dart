@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_currency_converter/currency_converter/models/currency_model.dart';
 import 'package:flutter_currency_converter/service/enums/bloc_status.dart';
-import 'package:flutter_currency_converter/service/models/currency_model.dart';
-import 'package:flutter_currency_converter/service/repository/currency_repository.dart';
+import 'package:flutter_currency_converter/currency_converter/repository/currency_repository.dart';
 
 part 'converter_event.dart';
 part 'converter_state.dart';
