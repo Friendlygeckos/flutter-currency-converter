@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_currency_converter/service/repository/currency_repository.dart';
-import 'package:flutter_currency_converter/views/currency_converter.dart';
-
-import 'bloc/converter_bloc.dart';
+import 'package:flutter_currency_converter/currency_converter/bloc/converter_bloc.dart';
+import 'package:flutter_currency_converter/currency_converter/repository/currency_repository.dart';
+import 'package:flutter_currency_converter/currency_converter/views/currency_converter.dart';
 
 void main() {
   runApp(const MyApp());

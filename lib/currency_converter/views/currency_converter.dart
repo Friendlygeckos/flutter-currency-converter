@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_currency_converter/bloc/converter_bloc.dart';
+import 'package:flutter_currency_converter/currency_converter/bloc/converter_bloc.dart';
 import 'package:flutter_currency_converter/service/enums/bloc_status.dart';
 
 class CurrencyConverter extends StatefulWidget {

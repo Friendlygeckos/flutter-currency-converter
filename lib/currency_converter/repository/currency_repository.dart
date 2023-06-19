@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_currency_converter/service/models/currency_model.dart';
+import 'package:flutter_currency_converter/currency_converter/models/currency_model.dart';
 import 'package:http/http.dart' as http;
 
 class CurrencyRepository {
