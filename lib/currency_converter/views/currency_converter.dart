@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_currency_converter/currency_converter/bloc/converter_bloc.dart';
 import 'package:flutter_currency_converter/service/enums/bloc_status.dart';
+import 'package:flutter_currency_converter/theme/bloc/theme_bloc.dart';
 
 class CurrencyConverter extends StatefulWidget {
   const CurrencyConverter({super.key});
@@ -23,6 +24,8 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
 
   @override
   Widget build(BuildContext context) {
+    final toggle = context.select((ThemeBloc bloc) => bloc.state.toggle);
+
     return BlocBuilder<ConverterBloc, ConverterState>(
       buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
@@ -35,6 +38,11 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Currency Converter'),
+            leading: Switch(
+              value: toggle,
+              onChanged: (bool newValue) =>
+                  context.read<ThemeBloc>().add(ToggleTheme()),
+            ),
           ),
           body: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
